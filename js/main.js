@@ -16,6 +16,43 @@
     window.addEventListener("scroll", syncHeaderState, { passive: true });
   }
 
+  const menuToggle = document.querySelector(".mobile-menu-toggle");
+  const mobileNav = document.querySelector(".mobile-nav");
+
+  const closeMobileMenu = () => {
+    if (!menuToggle || !mobileNav) {
+      return;
+    }
+
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Buka menu navigasi");
+    mobileNav.classList.remove("is-open");
+  };
+
+  if (menuToggle && mobileNav) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Buka menu navigasi" : "Tutup menu navigasi",
+      );
+
+      mobileNav.classList.toggle("is-open", !isOpen);
+    });
+
+    mobileNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMobileMenu();
+      }
+    });
+  }
+
   if (!slides.length || !controls.length) {
     return;
   }
